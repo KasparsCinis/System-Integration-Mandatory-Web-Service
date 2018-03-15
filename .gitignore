@@ -46,5 +46,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-/image-server/cifar-10-batches-py/*
-/image-server/*
+image-server/saved_models/*
+image-server/__pycache__/*

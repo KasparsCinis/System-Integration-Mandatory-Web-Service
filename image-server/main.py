@@ -10,7 +10,7 @@ from keras.models import load_model
 from PIL import Image
 import numpy as np
 
-modelName = "saved_models/keras_cifar10_trained_model.h5"
+modelName = "saved_models/cifar10.h5"
 
 def load_image(img_path, show=False):
 

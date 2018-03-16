@@ -60,6 +60,7 @@ $config = [
                         'POST {id}/test' => 'test',
                     ],
                 ],
+                '<controller>/<action>' => '<controller>/<action>'
             ],
         ],
     ],

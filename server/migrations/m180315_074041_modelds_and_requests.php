@@ -28,6 +28,7 @@ class m180315_074041_modelds_and_requests extends Migration
         /** Models */
         $this->createTable("model", [
             "id" => Schema::TYPE_PK,
+            "token" => Schema::TYPE_INTEGER . " NOT NULL",
             "trained_images" => Schema::TYPE_INTEGER . " default 0",
             "created_at" => Schema::TYPE_INTEGER . " NULL",
             "updated_at" => Schema::TYPE_INTEGER . " NULL",
@@ -41,6 +42,8 @@ class m180315_074041_modelds_and_requests extends Migration
             "created_at" => Schema::TYPE_INTEGER . " NULL",
             "updated_at" => Schema::TYPE_INTEGER . " NULL",
         ], $tableOptions);
+
+        $this->addForeignKey('model_fk_token', 'model', 'token', 'token', 'id', 'CASCADE');
     }
 
     /**

@@ -19,6 +19,8 @@ use yii\web\IdentityInterface;
  */
 class Token extends ActiveRecord implements IdentityInterface, RateLimitInterface
 {
+    static $user;
+
     private $rateLimit = 10;
 
     public function getRateLimit($request, $action)
@@ -43,9 +45,11 @@ class Token extends ActiveRecord implements IdentityInterface, RateLimitInterfac
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return Token::find()
+        Token::$user = Token::find()
             ->where(['token' => $token])
             ->one();
+
+        return Token::$user;
     }
 
     /**
@@ -56,6 +60,14 @@ class Token extends ActiveRecord implements IdentityInterface, RateLimitInterfac
         return Token::find()
             ->where(['id' => $id])
             ->one();
+    }
+
+    /**
+     * @return \app\models\Token
+     */
+    public static function findCurrentIdentity()
+    {
+       return Token::$user;
     }
 
     /**

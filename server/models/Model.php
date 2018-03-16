@@ -4,12 +4,15 @@ namespace app\models;
 
 use Yii;
 use yii\filters\RateLimitInterface;
+use yii\web\ForbiddenHttpException;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "model".
  *
  * @property int $id
  * @property int $trained_images
+ * @property int $token
  * @property int $created_at
  * @property int $updated_at
  */
@@ -46,7 +49,7 @@ class Model extends \yii\db\ActiveRecord implements RateLimitInterface
     public function rules()
     {
         return [
-            [['trained_images', 'created_at', 'updated_at'], 'integer'],
+            [['trained_images', 'created_at', 'updated_at', 'token'], 'integer'],
         ];
     }
 
@@ -61,5 +64,29 @@ class Model extends \yii\db\ActiveRecord implements RateLimitInterface
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert)
+    {
+        if ($insert){
+            $this->token = Token::findCurrentIdentity()->id;
+        }
+
+        return parent::beforeSave($insert);
+    }
+
+    /**
+     * @return bool
+     * @throws \yii\web\ForbiddenHttpException
+     */
+    public function beforeDelete()
+    {
+        if ($this->token != Token::findCurrentIdentity()->id)
+            throw new ForbiddenHttpException('Model not created by current token');
+
+        return parent::beforeDelete();
     }
 }

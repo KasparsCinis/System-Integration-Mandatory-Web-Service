@@ -1,14 +1,19 @@
 import os
 import os.path
+import requests
 import numpy as np
+import json
+from io import BytesIO
+from PIL import Image
 import keras
 from keras.datasets import cifar10
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D
+from keras.preprocessing import image
 from keras.models import load_model
-from flask import Flask, url_for, request, abort
+from flask import Flask, url_for, request, abort, jsonify
 from create_empty import create_empty
 from trainer_custom import train
 app = Flask(__name__)
@@ -45,14 +50,29 @@ def api_train():
 
 @app.route('/test', methods = ['POST'])
 def api_test():
-    model = load_model_memory(request.json['model'])
-    pred = model.predict(request.json['image'])
+    if (request.json['password'] != password):
+        abort(400)
+    if 'model' not in request.json:
+        abort(400)
+    if 'image' not in request.json:
+        abort(400)
 
-    return 'Result: ' + pred
+    response = requests.get(request.json['image'])
+    img = Image.open(BytesIO(response.content))
+    img = img.resize((32, 32), Image.ANTIALIAS)
+    img_tensor = image.img_to_array(img)
+    img_tensor = np.expand_dims(img_tensor,axis=0)
+    img_tensor /= 255.
+
+    model = load_model_memory(request.json['model'])
+    pred = model.predict(img_tensor)
+    result = np_to_result(pred[0], request.json['model'])
+
+    return jsonify(result)
 
 def load_model_memory(modelname):
     modelPath = "saved_models/" + modelname + ".h5"
-    print(modelPath)
+
     # create a new empty model
     if not (os.path.isfile(modelPath)):
         print("model doesn't exist")
@@ -66,8 +86,22 @@ def load_model_memory(modelname):
 
     return model
 
+def np_to_result(result, modelname):
 
+    jsonArray = {}
+
+    if (modelname == "1"):
+        jsonArray = {
+            "airplane": str(round(result[0], 3)),
+            "dog": str(round(result[5], 3))
+        }
+    else:
+        jsonArray = {
+            "value": str(round(result[0], 3))
+        }
+
+    return jsonArray
 
 if __name__ == '__main__':
     app.run(host= '0.0.0.0')
-    #load_model("saved_models/cifar10.h5")
+    #load_model("saved_models/1.h5")

@@ -2,6 +2,8 @@
 namespace app\controllers;
 
 use app\models\Model;
+use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\HttpBearerAuth;
@@ -11,6 +13,8 @@ use yii\web\NotFoundHttpException;
 
 class RestController extends ActiveController
 {
+    private $pythonServer = "http://192.168.0.103:5000";
+    private $pythonPassword = "3p4tow345owh34";
     public $modelClass = 'app\models\Model';
 
     public function behaviors()
@@ -37,8 +41,19 @@ class RestController extends ActiveController
         $model->trained_images++;
         $model->save();
 
-        /** @todo: Call python train method */
+        /** Call python train method */
+        $client = new Client();
 
+        $response = $client->request(
+            'POST',
+            "{$this->pythonServer}/test",
+            [
+                'form_params' => [
+                    'key1' => 'value1',
+                    'key2' => 'value2'
+                ]
+            ]
+        );
 
         return [
             'status' => 201,
@@ -56,16 +71,27 @@ class RestController extends ActiveController
         if (!$inputImage)
             throw new NotFoundHttpException('No Image specified');
 
+        //$image = file_get_contents($inputImage);
+//var_dump($image);
         $model->trained_images++;
         $model->save();
 
-        /** @todo: Call python test method */
+        /** Call python test method */
+        $client = new Client();
 
+        $response = $client->post(
+            "{$this->pythonServer}/test", [
+                RequestOptions::JSON => [
+                    'model' => $id,
+                    'password' => $this->pythonPassword,
+                    'image' => $inputImage
+                ]
+            ]
+        );
 
         return [
-            'status' => 201,
             'message' => 'Model tested',
-            'result'  => 'Result...'
+            'value'  => json_decode($response->getBody()->getContents()),
         ];
     }
 }

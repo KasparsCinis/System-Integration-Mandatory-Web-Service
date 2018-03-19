@@ -44,10 +44,10 @@ def create_empty(modelName):
     opt = keras.optimizers.rmsprop(lr=0.0001, decay=1e-6)
 
     # Let's train the model using RMSprop
-    model.compile(loss='categorical_crossentropy',
+    model.compile(loss='binary_crossentropy',
                   optimizer=opt,
                   metrics=['accuracy'])
 
     model.save(modelPath)
 
-    return True
+    return model

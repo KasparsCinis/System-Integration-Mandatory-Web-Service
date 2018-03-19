@@ -27,7 +27,11 @@ class RestController extends ActiveController
         return $behaviors;
     }
 
-
+    /**
+     * @param $id
+     * @return array
+     * @throws NotFoundHttpException
+     */
     public function actionTrain($id)
     {
         $model = Model::findOne($id);
@@ -44,23 +48,26 @@ class RestController extends ActiveController
         /** Call python train method */
         $client = new Client();
 
-        $response = $client->request(
-            'POST',
-            "{$this->pythonServer}/test",
-            [
-                'form_params' => [
-                    'key1' => 'value1',
-                    'key2' => 'value2'
+        /*$response = $client->post(
+            "{$this->pythonServer}/train", [
+                RequestOptions::JSON => [
+                    'model' => $id,
+                    'password' => $this->pythonPassword,
+                    'image' => $inputImage
                 ]
             ]
-        );
+        );*/
 
         return [
-            'status' => 201,
             'message' => 'Model trained'
         ];
     }
 
+    /**
+     * @param $id
+     * @return array
+     * @throws NotFoundHttpException
+     */
     public function actionTest($id)
     {
         $model = Model::findOne($id);
@@ -70,11 +77,6 @@ class RestController extends ActiveController
             throw new NotFoundHttpException('Model not found');
         if (!$inputImage)
             throw new NotFoundHttpException('No Image specified');
-
-        //$image = file_get_contents($inputImage);
-//var_dump($image);
-        $model->trained_images++;
-        $model->save();
 
         /** Call python test method */
         $client = new Client();
@@ -92,6 +94,83 @@ class RestController extends ActiveController
         return [
             'message' => 'Model tested',
             'value'  => json_decode($response->getBody()->getContents()),
+        ];
+    }
+
+    /**
+     * @param $id
+     * @return array
+     * @throws NotFoundHttpException
+     */
+    public function actionTestArray($id)
+    {
+        $model = Model::findOne($id);
+        $images = \Yii::$app->request->post('images');
+
+        if (!$model)
+            throw new NotFoundHttpException('Model not found');
+        if (!$images)
+            throw new NotFoundHttpException('No Image specified');
+
+        $resultResponses = [];
+
+        /** Call python test method */
+        $client = new Client();
+
+        foreach ($images as $image){
+            $response = $client->post(
+                "{$this->pythonServer}/test", [
+                    RequestOptions::JSON => [
+                        'model' => $id,
+                        'password' => $this->pythonPassword,
+                        'image' => $image
+                    ]
+                ]
+            );
+
+            $resultResponses[] = json_decode($response->getBody()->getContents());
+        }
+
+
+        return [
+            'message' => 'Model tested',
+            'value'  => $resultResponses,
+        ];
+    }
+
+    /**
+     * @param $id
+     * @return array
+     * @throws NotFoundHttpException
+     */
+    public function actionTrainArray($id)
+    {
+        $model = Model::findOne($id);
+        $inputImage = \Yii::$app->request->post('image');
+
+        if (!$model)
+            throw new NotFoundHttpException('Model not found');
+        if (!$inputImage)
+            throw new NotFoundHttpException('No Image specified');
+
+        $model->trained_images++;
+        $model->save();
+
+        /** Call python train method */
+        $client = new Client();
+
+        /*$response = $client->post(
+            "{$this->pythonServer}/train", [
+                RequestOptions::JSON => [
+                    'model' => $id,
+                    'password' => $this->pythonPassword,
+                    'image' => $inputImage
+                ]
+            ]
+        );*/
+
+        return [
+            'message' => 'Model trained'
         ];
     }
 }

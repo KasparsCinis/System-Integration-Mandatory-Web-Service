@@ -58,13 +58,15 @@ $config = [
                     'extraPatterns' => [
                         'POST {id}/train' => 'train',
                         'POST {id}/test' => 'test',
+                        'POST {id}/trainArray' => 'train-array',
+                        'POST {id}/testArray' => 'test-array',
                     ],
                 ],
                 '<controller>/<action>' => '<controller>/<action>'
             ],
         ],
     ],
-    'params' => $params,
+    'params' => $params
 ];
 
 

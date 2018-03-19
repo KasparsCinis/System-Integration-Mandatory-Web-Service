@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\filters\RateLimitInterface;
 use yii\web\IdentityInterface;
@@ -124,6 +125,16 @@ class Token extends ActiveRecord implements IdentityInterface, RateLimitInterfac
             'token' => 'Token',
             'updated_at' => 'Updated At',
             'created_at' => 'Created At',
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class
         ];
     }
 }

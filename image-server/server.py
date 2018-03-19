@@ -41,9 +41,20 @@ def api_train():
         abort(400)
     if 'model' not in request.json:
         abort(400)
+    if 'image' not in request.json:
+        abort(400)
+
+    request.json['model'] = str(request.json['model'])
+
+    response = requests.get(request.json['image'])
+    img = Image.open(BytesIO(response.content))
+    img = img.resize((32, 32), Image.ANTIALIAS)
+    img_tensor = image.img_to_array(img)
+    img_tensor = img_tensor.astype('float32')
+    img_tensor /= 255
 
     model = load_model_memory(request.json['model'])
-    model = train(model, request.json['image'], request.json['model'])
+    model = train(model, img_tensor, request.json['model'])
     models[request.json['model']] = model
 
     return 'Model Trained'
@@ -56,6 +67,8 @@ def api_test():
         abort(400)
     if 'image' not in request.json:
         abort(400)
+
+    request.json['model'] = str(request.json['model'])
 
     response = requests.get(request.json['image'])
     img = Image.open(BytesIO(response.content))
@@ -75,8 +88,8 @@ def load_model_memory(modelname):
 
     # create a new empty model
     if not (os.path.isfile(modelPath)):
-        print("model doesn't exist")
-        abort(400)
+        model = create_empty(modelname)
+        models[modelname] = model
 
     if modelname not in models:
         model = load_model(modelPath)
@@ -93,7 +106,7 @@ def np_to_result(result, modelname):
     if (modelname == "1"):
         jsonArray = {
             "airplane": str(round(result[0], 3)),
-            "dog": str(round(result[5], 3))
+            "bird": str(round(result[2], 3))
         }
     else:
         jsonArray = {

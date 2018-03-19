@@ -11,13 +11,12 @@ import os
 def train(model, image, modelname):
     modelPath = "saved_models/" + modelname + ".h5"
     batch_size = 32
-    epochs = 5
 
+    x_train = np.array([image])
     labels = np.array([0])
 
-    model.fit(image, labels,
-              batch_size=batch_size,
-              epochs=epochs)
+    model.fit(x_train, labels,
+              batch_size=batch_size)
 
     model.save(modelPath)
 

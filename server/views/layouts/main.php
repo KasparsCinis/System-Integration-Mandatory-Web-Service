@@ -39,8 +39,8 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'Documentation', 'url' => ['/site/docs']],
-            ['label' => 'Installation', 'url' => ['/site/guide']],
+            ['label' => 'Documentation', 'url' => ['/docs.html']],
+            ['label' => 'Installation', 'url' => 'https://github.com/KasparsCinis/System-Integration-Mandatory-Web-Service/tree/master'],
         ],
     ]);
     NavBar::end();

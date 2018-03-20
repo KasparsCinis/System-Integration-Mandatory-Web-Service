@@ -1,10 +1,10 @@
 # System-Integration-Mandatory-Web-Service
 Mandatory semester assignment
 
-#Features 
+#Features
 
-The image recognition API trained on cifar10 dataset, can try to differentiate between images of planes and 
-birds. 
+The image recognition API trained on cifar10 dataset, can try to differentiate between images of planes and
+birds.
 Trained with 25 epochs, achieved accuraccy of average 75% based on the test data set.
 Accurracy could be increased up to 80% by training with 100 epochs.
 
@@ -31,7 +31,7 @@ Upon running the server, it will train the first model on cifar10 upon the first
 Additional dependencies:
 
     -Pillow
-    
+
     -flask
 
 ### PHP server

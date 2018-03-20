@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://webservice.local/soap/wsdl?ws=1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="app.controllers.SoapController" targetNamespace="http://webservice.local/soap/wsdl?ws=1">
+  <types>
+    <xsd:schema targetNamespace="http://webservice.local/soap/wsdl?ws=1">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+    </xsd:schema>
+  </types>
+  <portType name="app.controllers.SoapControllerPort">
+    <operation name="actionCreateModel">
+      <input message="tns:actionCreateModelIn"/>
+      <output message="tns:actionCreateModelOut"/>
+    </operation>
+    <operation name="actionDeleteModel">
+      <input message="tns:actionDeleteModelIn"/>
+      <output message="tns:actionDeleteModelOut"/>
+    </operation>
+    <operation name="actionTrain">
+      <input message="tns:actionTrainIn"/>
+      <output message="tns:actionTrainOut"/>
+    </operation>
+    <operation name="actionTrainArray">
+      <input message="tns:actionTrainArrayIn"/>
+      <output message="tns:actionTrainArrayOut"/>
+    </operation>
+    <operation name="actionTest">
+      <input message="tns:actionTestIn"/>
+      <output message="tns:actionTestOut"/>
+    </operation>
+    <operation name="actionTestArray">
+      <input message="tns:actionTestArrayIn"/>
+      <output message="tns:actionTestArrayOut"/>
+    </operation>
+  </portType>
+  <binding name="app.controllers.SoapControllerBinding" type="tns:app.controllers.SoapControllerPort">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="actionCreateModel">
+      <soap:operation soapAction="http://webservice.local/soap/wsdl?ws=1#actionCreateModel"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservice.local/soap/wsdl?ws=1"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservice.local/soap/wsdl?ws=1"/>
+      </output>
+    </operation>
+    <operation name="actionDeleteModel">
+      <soap:operation soapAction="http://webservice.local/soap/wsdl?ws=1#actionDeleteModel"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservice.local/soap/wsdl?ws=1"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservice.local/soap/wsdl?ws=1"/>
+      </output>
+    </operation>
+    <operation name="actionTrain">
+      <soap:operation soapAction="http://webservice.local/soap/wsdl?ws=1#actionTrain"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservice.local/soap/wsdl?ws=1"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservice.local/soap/wsdl?ws=1"/>
+      </output>
+    </operation>
+    <operation name="actionTrainArray">
+      <soap:operation soapAction="http://webservice.local/soap/wsdl?ws=1#actionTrainArray"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservice.local/soap/wsdl?ws=1"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservice.local/soap/wsdl?ws=1"/>
+      </output>
+    </operation>
+    <operation name="actionTest">
+      <soap:operation soapAction="http://webservice.local/soap/wsdl?ws=1#actionTest"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservice.local/soap/wsdl?ws=1"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservice.local/soap/wsdl?ws=1"/>
+      </output>
+    </operation>
+    <operation name="actionTestArray">
+      <soap:operation soapAction="http://webservice.local/soap/wsdl?ws=1#actionTestArray"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservice.local/soap/wsdl?ws=1"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservice.local/soap/wsdl?ws=1"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="app.controllers.SoapControllerService">
+    <port name="app.controllers.SoapControllerPort" binding="tns:app.controllers.SoapControllerBinding">
+      <soap:address location="http://webservice.local/soap/wsdl?ws=1"/>
+    </port>
+  </service>
+  <message name="actionCreateModelIn">
+    <part name="token" type="xsd:string"/>
+  </message>
+  <message name="actionCreateModelOut">
+    <part name="return" type="xsd:int"/>
+  </message>
+  <message name="actionDeleteModelIn">
+    <part name="token" type="xsd:string"/>
+    <part name="modelId" type="xsd:int"/>
+  </message>
+  <message name="actionDeleteModelOut">
+    <part name="return" type="xsd:boolean"/>
+  </message>
+  <message name="actionTrainIn">
+    <part name="token" type="xsd:string"/>
+    <part name="modelId" type="xsd:int"/>
+    <part name="image" type="xsd:string"/>
+  </message>
+  <message name="actionTrainOut">
+    <part name="return" type="xsd:string"/>
+  </message>
+  <message name="actionTrainArrayIn">
+    <part name="token" type="xsd:string"/>
+    <part name="modelId" type="xsd:int"/>
+    <part name="images" type="soap-enc:Array"/>
+  </message>
+  <message name="actionTrainArrayOut">
+    <part name="return" type="xsd:string"/>
+  </message>
+  <message name="actionTestIn">
+    <part name="token" type="xsd:string"/>
+    <part name="modelId" type="xsd:int"/>
+    <part name="image" type="xsd:string"/>
+  </message>
+  <message name="actionTestOut">
+    <part name="return" type="xsd:string"/>
+  </message>
+  <message name="actionTestArrayIn">
+    <part name="token" type="xsd:string"/>
+    <part name="modelId" type="xsd:int"/>
+    <part name="images" type="soap-enc:Array"/>
+  </message>
+  <message name="actionTestArrayOut">
+    <part name="return" type="xsd:string"/>
+  </message>
+</definitions>

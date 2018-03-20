@@ -243,7 +243,7 @@ class SoapController extends Controller
 
         return \yii\helpers\Json::encode([
             'message' => 'Model tested',
-            'value'  => json_decode($resultResponses),
+            'value'  => $resultResponses,
         ]);
     }
 }
